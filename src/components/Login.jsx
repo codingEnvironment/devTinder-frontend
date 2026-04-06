@@ -1,9 +1,12 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 import axios from "axios";
 
 const Login = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleClick = async () => {
     const email = emailRef.current.value;
@@ -18,6 +21,8 @@ const Login = () => {
         { withCredentials: true },
       );
       console.log("Login successful:", response.data);
+      // dispatch the user data to the store
+      dispatch(addUser(response.data));
     } catch (error) {
       console.error("Login failed:", error.response.data);
     }
