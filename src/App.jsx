@@ -3,7 +3,6 @@ import Body from "./components/Body";
 import Login from "./components/Login";
 
 function App() {
-
   return (
     <BrowserRouter basename="/">
       <Routes>
@@ -14,7 +13,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
