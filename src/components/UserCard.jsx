@@ -1,8 +1,11 @@
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user }) => {
   const { _id, firstName, lastName, profilePicture, age, bio } = user;
+  const dispatch = useDispatch();
 
   const handleSendRequest = async (status) => {
     try {
@@ -13,7 +16,9 @@ const UserCard = ({ user }) => {
           withCredentials: true,
         },
       );
-      console.log("Response data: ", response.data);
+      console.log("request send api response: ", response.data);
+      // Remove the user from the feed after sending the request
+      dispatch(removeUserFromFeed(_id));
     } catch (error) {
       console.error("Error sending request:", error);
     }

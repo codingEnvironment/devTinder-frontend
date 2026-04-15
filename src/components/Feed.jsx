@@ -16,7 +16,7 @@ const Feed = () => {
       const response = await axios.get(API_BASE_URL + "/user/feed", {
         withCredentials: true,
       });
-      console.log("Feed data:", response.data.data);
+      console.log("Feed data from API:", response.data.data);
       dispatch(addFeed(response?.data?.data));
     } catch (error) {
       console.error("Error fetching feed:", error);
@@ -24,8 +24,11 @@ const Feed = () => {
   };
 
   useEffect(() => {
+    console.log("useEffect fetching feed...");
     getFeed();
   }, []);
+
+  if (!feed) return;
 
   if (feed.length === 0) {
     return (
