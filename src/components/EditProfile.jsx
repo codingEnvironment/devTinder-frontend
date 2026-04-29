@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import UserCard from "./UserCard";
 import axios from "axios";
 import { addUser } from "../utils/userSlice";
 import { API_BASE_URL } from "../utils/constants";
 
 const EditProfile = ({ user }) => {
+  const dispatch = useDispatch();
   const [editedUser, setEditedUser] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -14,6 +16,7 @@ const EditProfile = ({ user }) => {
     bio: user?.bio || "",
     profilePicture: user?.profilePicture || "",
   });
+  const [showToast, setShowToast] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +37,15 @@ const EditProfile = ({ user }) => {
       );
       const savedUser = response?.data?.data;
       dispatch(addUser(savedUser));
+
+      // Show toast
+      setShowToast(true);
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+
       console.log("Profile saved succesfully", savedUser);
     } catch (error) {
       console.error("Error saving profile:", error);
@@ -41,41 +53,49 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 mx-auto flex gap-8 items-start justify-center flex-wrap w-full max-w-6xl">
-      <div className="flex-[1.5] min-w-0">
-        <legend className="fieldset-legend text-center">Edit Profile</legend>
-        <div className="w-full flex flex-col gap-2">
-          <label className="label">First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            className="input w-full"
-            placeholder="First Name"
-            value={editedUser.firstName}
-            onChange={handleInputChange}
-          />
+    <>
+      {showToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Your details are sucessfully saved!</span>
+          </div>
+        </div>
+      )}
+      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 mx-auto flex gap-8 items-start justify-center flex-wrap w-full max-w-6xl">
+        <div className="flex-[1.5] min-w-0">
+          <legend className="fieldset-legend text-center">Edit Profile</legend>
+          <div className="w-full flex flex-col gap-2">
+            <label className="label">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              className="input w-full"
+              placeholder="First Name"
+              value={editedUser.firstName}
+              onChange={handleInputChange}
+            />
 
-          <label className="label">Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-            className="input w-full"
-            placeholder="Last Name"
-            value={editedUser.lastName}
-            onChange={handleInputChange}
-          />
+            <label className="label">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              className="input w-full"
+              placeholder="Last Name"
+              value={editedUser.lastName}
+              onChange={handleInputChange}
+            />
 
-          <label className="label">Email</label>
-          <input
-            type="email"
-            name="email"
-            className="input w-full"
-            placeholder="Email"
-            value={editedUser.email}
-            onChange={handleInputChange}
-          />
+            <label className="label">Email</label>
+            <input
+              type="email"
+              name="email"
+              className="input w-full"
+              placeholder="Email"
+              value={editedUser.email}
+              onChange={handleInputChange}
+            />
 
-          {/* <label className="label">Interests</label>
+            {/* <label className="label">Interests</label>
           <input
             type="text"
             name="interests"
@@ -85,42 +105,46 @@ const EditProfile = ({ user }) => {
             onChange={handleInputChange}
           /> */}
 
-          <label className="label">Age</label>
-          <input
-            type="number"
-            name="age"
-            className="input w-full"
-            placeholder="Age"
-            value={editedUser.age}
-            onChange={handleInputChange}
-          />
+            <label className="label">Age</label>
+            <input
+              type="number"
+              name="age"
+              className="input w-full"
+              placeholder="Age"
+              value={editedUser.age}
+              onChange={handleInputChange}
+            />
 
-          <label className="label">Bio</label>
-          <textarea
-            name="bio"
-            className="textarea w-full"
-            placeholder="Bio"
-            value={editedUser.bio}
-            onChange={handleInputChange}
-          />
+            <label className="label">Bio</label>
+            <textarea
+              name="bio"
+              className="textarea w-full"
+              placeholder="Bio"
+              value={editedUser.bio}
+              onChange={handleInputChange}
+            />
 
-          <label className="label">Profile Picture URL</label>
-          <input
-            type="url"
-            name="profilePicture"
-            className="input w-full"
-            placeholder="Profile Picture URL"
-            value={editedUser.profilePicture}
-            onChange={handleInputChange}
-          />
+            <label className="label">Profile Picture URL</label>
+            <input
+              type="url"
+              name="profilePicture"
+              className="input w-full"
+              placeholder="Profile Picture URL"
+              value={editedUser.profilePicture}
+              onChange={handleInputChange}
+            />
 
-          <button className="btn btn-neutral mt-4" onClick={handleSaveProfile}>
-            Save Profile
-          </button>
+            <button
+              className="btn btn-neutral mt-4"
+              onClick={handleSaveProfile}
+            >
+              Save Profile
+            </button>
+          </div>
         </div>
-      </div>
-      <UserCard user={editedUser} />
-    </fieldset>
+        <UserCard user={editedUser} />
+      </fieldset>
+    </>
   );
 };
 
