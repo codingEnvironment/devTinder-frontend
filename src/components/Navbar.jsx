@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { removeConnections } from "../utils/connectionsSlice";
 import { removeFeed } from "../utils/feedSlice";
+import { removeRequests } from "../utils/requestsSlice";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
@@ -17,6 +18,7 @@ const Navbar = () => {
     dispatch(removeUser());
     dispatch(removeConnections());
     dispatch(removeFeed());
+    dispatch(removeRequests());
     navigate("/login");
   };
   return (
@@ -57,6 +59,9 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/connections">Connections</Link>
+              </li>
+              <li>
+                <Link to="/requests">Requests</Link>
               </li>
               <li>
                 <a onClick={handleLogOut}>Logout</a>
